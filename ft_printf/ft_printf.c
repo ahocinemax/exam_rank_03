@@ -3,16 +3,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-int		ft_strlen(char *str)
-{
-	int i = 0;
-
-	if (!str)
-		return (0);
-	while (str[i])
-		i++;
-	return (i);
-}
+#define HEXA	"0123456789abcdef"
 
 void	ft_putchar(char c, int *count)
 {
@@ -48,6 +39,17 @@ void	ft_putnbr(int nb, int *count)
 	}
 }
 
+void	ft_putnbr_hex(long nbr, int *count)
+{
+	if (nbr >= 16)
+	{
+		ft_putnbr_hex(nbr / 16, count);
+		ft_putnbr_hex(nbr % 16, count);
+	}
+	else
+		ft_putchar(HEXA[nbr], count);
+}
+
 void	ft_display_int(va_list lst_param, int *count)
 {
 	int nb = va_arg(lst_param, int);
@@ -64,16 +66,18 @@ void	ft_display_str(va_list lst_param, int *count)
 
 void	ft_display_hex(va_list lst_param, int *count)
 {
-	(void)lst_param;
-	(void)count;
+	long	nbr = va_arg(lst_param, long);
+	ft_putnbr_hex(nbr, count);
 }
 
 int ft_printf(char *line, ...)
 {
-	int i = 0;
-	int count = 0;
 	va_list	lst_param;
+	int count;
+	int i;
 
+	i = 0;
+	count = 0;
 	va_start(lst_param, line);
 	while (line[i])
 	{
@@ -89,7 +93,7 @@ int ft_printf(char *line, ...)
 			else if (line[i] == '%')
 				ft_putchar('%', &count);
 			else
-				return (va_end(lst_param), ft_putstr("parsing error\n", NULL), -1);
+				return (va_end(lst_param), ft_putstr("error\n", NULL), -1);
 		}
 		else
 			ft_putchar(line[i], &count);
@@ -100,8 +104,15 @@ int ft_printf(char *line, ...)
 
 int main(void)
 {
-	char *str = "HelloWorld";
-	ft_printf("%s\n", str);
-	// int ret2 = printf("%s\n", str);
-	// printf("my_return: %d\noffReturn: %d\n", ret1, ret2);
+	char	*str;
+	char	*nul;
+	int 	ret1;
+	int 	ret2;
+
+	str = "HelloWorld";
+	(void)str;
+	nul = NULL;
+	ret1 = ft_printf("     \t%s %% %x%s%% o{%x}di$PATH%%%%%%%%zf  \t\a  zoeif%x\n", nul, 42, nul, '{', 2147483647);
+	ret2 = printf("     \t%s %% %x%s%% o{%x}di$PATH%%%%%%%%zf  \t\a  zoeif%x\n", nul, 42, nul, '{', 2147483647);
+	printf("my_return: %d\noffReturn: %d\n", ret1, ret2);
 }
