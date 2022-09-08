@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <limits.h>
 
 #define HEXA	"0123456789abcdef"
 
@@ -12,9 +13,11 @@ void	ft_putchar(char c, int *count)
 		(*count)++;
 }
 
-void    ft_putstr(char *str, int *count)
+void	ft_putstr(char *str, int *count)
 {
-	int	i = 0;
+	int	i;
+
+	i = 0;
 	if (!str)
 		return ;
 	while (str[i])
@@ -24,7 +27,7 @@ void    ft_putstr(char *str, int *count)
 void	ft_putnbr(int nb, int *count)
 {
 	if (nb == -2147483648)
-		ft_putstr("-2147483648", count);
+		return (ft_putstr("-2147483648", count), (void)0);
 	if (nb < 0)
 	{
 		nb *= -1;
@@ -52,13 +55,17 @@ void	ft_putnbr_hex(long nbr, int *count)
 
 void	ft_display_int(va_list lst_param, int *count)
 {
-	int nb = va_arg(lst_param, int);
-    ft_putnbr(nb, count);
+	int	nb;
+
+	nb = va_arg(lst_param, int);
+	ft_putnbr(nb, count);
 }
 
 void	ft_display_str(va_list lst_param, int *count)
 {
-	char *str = va_arg(lst_param, char *);
+	char	*str;
+
+	str = va_arg(lst_param, char *);
 	if (!str)
 		str = "(null)";
 	ft_putstr(str, count);
@@ -66,15 +73,17 @@ void	ft_display_str(va_list lst_param, int *count)
 
 void	ft_display_hex(va_list lst_param, int *count)
 {
-	long	nbr = va_arg(lst_param, long);
+	long	nbr;
+
+	nbr = va_arg(lst_param, long);
 	ft_putnbr_hex(nbr, count);
 }
 
-int ft_printf(char *line, ...)
+int	ft_printf(const char *line, ...)
 {
 	va_list	lst_param;
-	int count;
-	int i;
+	int		count;
+	int		i;
 
 	i = 0;
 	count = 0;
@@ -102,17 +111,18 @@ int ft_printf(char *line, ...)
 	return (va_end(lst_param), count);
 }
 
-int main(void)
+int	main(void)
 {
 	char	*str;
 	char	*nul;
-	int 	ret1;
-	int 	ret2;
+	int		ret1;
+	int		ret2;
 
-	str = "HelloWorld";
+	str = "Hello%s%World \t ";
 	(void)str;
 	nul = NULL;
-	ret1 = ft_printf("     \t%s %% %x%s%% o{%x}di$PATH%%%%%%%%zf  \t\a  zoeif%x\n", nul, 42, nul, '{', 2147483647);
-	ret2 = printf("     \t%s %% %x%s%% o{%x}di$PATH%%%%%%%%zf  \t\a  zoeif%x\n", nul, 42, nul, '{', 2147483647);
+	(void)nul;
+	ret1 = ft_printf(" %s\\ar%d\n", str, INT_MIN);
+	ret2 = printf(" %s\\ar%d\n", str, INT_MIN);
 	printf("my_return: %d\noffReturn: %d\n", ret1, ret2);
 }
