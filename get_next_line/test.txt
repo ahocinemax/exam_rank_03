@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-hello
-
-Worldo Comment allez vous ?
-ss AMV fejk cdms ZE3;.?
-=======
 test1
 
 
@@ -16,4 +10,3 @@ test3
 
 
 a
->>>>>>> a750be28b405385e48512f095376e11277540f81
